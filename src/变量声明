@@ -1,0 +1,133 @@
+只声明：
+    var v1 int
+
+声明并初始化：
+    v1 := 1
+    等价于：
+        var v1 int 
+        v1 = 1
+
+变量类型：
+    var v1 int
+    var v2 string
+    var v3 [10]int
+    var v4 [] int
+    var v5 struct{
+        f int
+    }
+
+    var v6 *int
+    var v7 map[string]int
+    var v8 func(a int)int
+
+
+匿名变量：
+    _, _, nickname := GetName() //GetName 返回3个参数， 只接收一个。
+
+常量：
+    1， 字面量：
+    2， 常量定义：
+        const Pi float64 = 3.141592653 
+        //Go的常量定义可以限定常量类型，但不是必需的。如果定义常量时没有指定类型，那么它 与字面常量一样，是无类型常量
+    3,  预定义常量： 
+        Go语言预定义了这些常量： true 、 false 和 iota 。
+        iota 比较特殊，可以被认为是一个可被编译器修改的常量，在每一个 const 关键字出现时被
+            重置为0，然后在下一个 const 出现之前，每出现一次 iota ，其所代表的数字会自动增1
+    4,  枚举：
+        const {
+            Sunday = iota
+            Monday
+            Tuesday
+            Wenesday
+            Thusday
+            Friday
+            Staturday
+            numberOfDays //这个常量没有导出
+        }
+        同go语言的其它符号一样，以大写字母开头的常量包外可见，如上，numberOfDay 为包内私有变量。
+
+    5，  类型：
+        bool
+        int8, byte, int16, uint, uintptr
+        float64, float32
+        complex64, complex128 //复数类型
+        string // 字符串类型
+        rune   // 字符类型
+        error  // 错误类型
+        复合类型：
+            pointer
+            array
+            slice
+            map
+            chan
+            struct
+            interface
+    6, 强制类型转换：
+        var value2 = int32
+        value1 := 64
+        value2 = value1 //报错
+        varlue2 = int(value1)
+    7, go 的字符编码支持：
+        字符串的编码转换是处理文本文档（比如TXT、XML、HTML等）非常常见的需求，不过可
+    惜的是Go语言仅支持UTF-8和Unicode编码。对于其他编码，Go语言标准库并没有内置的编码转
+    换支持。不过，所幸的是我们可以很容易基于 iconv 库用Cgo包装一个。这里有一个开源项目：
+    https://github.com/xushiwei/go-iconv。
+
+    字符类型
+        在Go语言中支持两个字符类型，一个是 byte （实际上是 uint8 的别名），代表UTF-8字符串
+        的单个字节的值；另一个是 rune ，代表单个Unicode字符。
+        关于 rune 相关的操作，可查阅Go标准库的 unicode 包。另外 unicode/utf8 包也提供了
+        UTF8和Unicode之间的转换。
+        出于简化语言的考虑，Go语言的多数API都假设字符串为UTF-8编码。尽管Unicode字符在标
+        准库中有支持，但实际上较少使用。
+
+
+数组：
+    var myArray [10]int = [10]int{1, 2, ,3 ,4 ,5, 6, 7, 8, 9, 0}
+    var mySlice []int = myArray[:5]
+
+    创建一个元素为5的数据切片：
+        mySlice1 := make([]int, 5)
+        mySlice1 := make([]int, 5, 10) // 并且预留10个元素空间
+
+    数组切片后 capacity 存在的意义：
+           可动态增减元素是数组切片比数组更为强大的功能。与数组相比，数组切片多了一个存储能
+        力（capacity）的概念，即元素个数和分配的空间可以是两个不同的值。合理地设置存储能力的
+        值，可以大幅降低数组切片内部重新分配内存和搬送内存块的频率，从而大大提高程序性能。
+
+        cap() 函数返回的是数组切片分配的空间大小
+        len() 函数返回的是数组切片中当前所存储的元素个数
+
+    append():
+        mySlice = append(mySlice, mySlice2...)
+        需要注意的是，我们在第二个参数 mySlice2 后面加了三个点，即一个省略号，如果没有这个省
+        略号的话，会有编译错误，因为按 append() 的语义，从第二个参数起的所有参数都是待附加的
+        元素。因为 mySlice 中的元素类型为 int ，所以直接传递 mySlice2 是行不通的。加上省略号相
+        当于把 mySlice2 包含的所有元素打散后传入
+    内容复制：
+        slice1 := []int{1, 2, 3, 4, 5}
+        slice2 := []int{5, 4, 3}
+        copy(slice2, slice1) // 只会复制slice1的前3个元素到slice2中
+        copy(slice1, slice2) // 只会复制slice2的3个元素到slice1的前3个位置
+        
+map: 类似于python 中的dict()
+    声名：
+        var myMap map[string] PersonInfo
+    创建：
+        myMap = make(map[string] PersonInfo)
+    元素赋值：
+        myMap["1234"] = PersonInfo("1", "jack", "room 101")
+    元素删除：
+        delete(myMap, "1234")
+    元素查找：
+        value, ok:= myMap["1234"]
+        if ok{
+            //找到了
+        }
+        找不到ok 为nil
+
+
+常用的内置方法：
+    len(s) // 获取字符串s长度
+
+

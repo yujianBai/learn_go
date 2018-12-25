@@ -1,0 +1,15 @@
+chan 之所以做成这样， 是有理论基础的，
+	Communication Sequential Process (CSP) 模型
+
+	chnn 应用：
+		Don't communicate by sharing memory; share momory by communicating.
+
+		不要通过共享内存来通信， 通过通信来共享内存
+
+		(通过共享内存来通信： 我们这只一个共享的标记flag, 通过flag 的值来判断事情是否做完了)
+
+传统同步机制： 使用共享内存来进行通信， 一般还是用chan 来进行通信吧
+    由于使用共享内存进行通信，内存资源需要保护。
+        waitGroup
+        Mutex
+        Cond

@@ -1,0 +1,25 @@
+传统测试：
+    1， 测试数据和测试逻辑混在一起
+    2， 出错信息不明确
+    3， 一旦一个数据出错，测试全部结束
+
+go 表格驱动测试
+    分离测试数据和逻辑
+    明确出错信息
+    可以部分失败
+
+    各个语言都可以这么做， 但是go 语言的语法使得我们更易实践表格测试
+
+命令行测试：
+    go test .    //运行当前目录的测试文件， 测试文件的格式：xxxx_test.go
+
+    代码覆盖率：
+        go test -coveryprofile=c.out
+
+        go tool cover -html=c.out //用工具查看
+
+    性能测试：
+        go test -bench . -cpufrofile cpu.out
+        go tool pprof cpu.out // 命令行查看， 用web 方式查看， 需要装
+        // Graphviz     www.graphviz.org
+

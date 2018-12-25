@@ -1,0 +1,45 @@
+go 语言是:
+    面向网络， 面向并发， 面向服务的通用语言
+    对http 的封装是良好的。
+
+
+http:
+    使用http客户端发送请求
+    使用http.Client 控制请求头部
+    使用thhputil 简化工作
+
+http服务器的性能分析：
+    import _ "net/http/pprof"
+    访问/debug/pprof/
+    使用 go tool pprof 分析性能
+
+
+常用标准库
+bufio
+log
+encoding/json
+regexp
+time
+stings/math/rand
+
+文档的查看：
+自己起服务： godoc-http:8888
+studygolang.com
+
+
+下载go 库：
+命令行执行： gopm get -g -v golang.org/x/text   //这个包时编码的包
+
+gopm get -g -v goalng.org/x/net/html
+
+gopm 的使用：
+    可以采用gopm从golang.org一些镜像网站上下载。
+    注意，gopm只能把包的原代码下载，需要自己去go install。
+
+    a). 安装gopm
+        go get -u github.com/gpmgo/gopm
+    b). 用gopm get -g代替go getgopm get
+        不采用-g参数，会把依赖包下载.vendor目录下面；
+        采用-g 参数，可以把依赖包下载到GOPATH目录中；
+        gopm get -g golang.org/x/net
+

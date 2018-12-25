@@ -1,0 +1,18 @@
+defer 调用
+    确保调用在函数结束时发生
+    defer 确保在函数结束时调用（以栈的顺序调用）
+
+panic
+    停止当前函数
+    一直向上返回，执行每一层的deger
+    如果没有遇见recover, 程序退出
+
+
+recover
+    仅在defer调用中使用
+    获取panic的值
+    如果无法处理， 重新panic
+
+error vs painc
+    意料之中的：使用error，如文件打不开
+    治疗之外的：使用panic, 如数组越界
