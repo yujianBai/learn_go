@@ -1,0 +1,32 @@
+Go语言标准库里提供的net包
+    支持基 于IP层、TCP/UDP层及更高层面（如HTTP、FTP、SMTP）的网络操作，其中用于IP层的称为RawSocket。
+
+在Go语言中编写网络程序时，我们将看不到传统的编码形式。以前我们使用Socket编程时，
+会按照如下步骤展开。
+    (1) 建立Socket：使用 socket() 函数。
+    (2) 绑定Socket：使用 bind() 函数。
+    (3) 监听：使用 listen() 函数。或者连接：使用 connect() 函数。
+    (4) 接受连接：使用 accept() 函数。
+    (5) 接收：使用 receive() 函数。或者发送：使用 send() 函数。
+
+Go语言标准库对此过程进行了抽象和封装。无论我们期望使用什么协议建立什么形式的连
+接，都只需要调用 net.Dial() 即可。
+
+
+
+Dial() 函数
+    Dial() 函数的原型如下：
+    func Dial(net, addr string) (Conn, error)
+    其中 net 参数是网络协议的名字， addr 参数是IP地址或域名，而端口号以“:”的形式跟随在地址
+    或域名的后面，端口号可选。如果连接成功，返回连接对象，否则返回 error 。
+    
+    我们来看一下几种常见协议的调用方式。
+   
+    TCP链接：
+        conn, err := net.Dial("tcp", "192.168.0.10:2100")
+    UDP链接：
+        conn, err := net.Dial("udp", "192.168.0.12:975")
+    ICMP链接（使用协议名称）：
+        conn, err := net.Dial("ip4:icmp", "www.baidu.com")
+    ICMP链接（使用协议编号）：
+        conn, err := net.Dial("ip4:1", "10.0.0.3")
