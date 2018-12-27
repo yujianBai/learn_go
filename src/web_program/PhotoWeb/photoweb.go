@@ -2,9 +2,11 @@ package main
 
 import (
 	"net/http"
+	// "fmt"
 	"io"
 	"log"
 	"os"
+	"html/template"
 	"io/ioutil"
 )
 
@@ -33,11 +35,17 @@ func isExists(path string) bool {
 
 func uploadHandler(w http.ResponseWriter, r *http.Request){
 	if r.Method == "GET"{
-		io.WriteString(w, "<form method=\"POST\" action=\"/upload\" "+
-		" enctype=\"multipart/form-data\">"+
-		"Choose an image to upload: <input name=\"image\" type=\"file\" />"+
-		"<input type=\"submit\" value=\"Upload\" />"+
-		"</form>")
+		// io.WriteString(w, "<form method=\"POST\" action=\"/upload\" "+
+		// " enctype=\"multipart/form-data\">"+
+		// "Choose an image to upload: <input name=\"image\" type=\"file\" />"+
+		// "<input type=\"submit\" value=\"Upload\" />"+
+		// "</form>")
+		t, err := template.ParseFiles("upload.html")
+		if err != nil {
+			http.Error(w, err.Error(),http.StatusInternalServerError)
+			return
+		}
+		t.Execute(w, nil)
 		return 
 	}
 	if r.Method == "POST" {
@@ -66,26 +74,42 @@ func uploadHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func listHandler(w http.ResponseWriter, r *http.Request) {
-	fileInfoArr, err := ioutil.ReadDir("./uploads")
+	fileInfoArr, err := ioutil.ReadDir(UPLOAD_DIR)
 	if err != nil {
 		http.Error(w, err.Error(),
 		http.StatusInternalServerError)
 		return
 	}
-	var listHtml string
+	locals := make(map[string]interface{})
+	images := []string{}
 	for _, fileInfo := range fileInfoArr {
-		imgid := fileInfo.Name
-		listHtml += "<li><a href=\"/view?id="+imgid+"\">imgid</a></li>"
+		images = append(images, fileInfo.Name())
 	}
-	io.WriteString(w, "<ol>"+listHtml+"</ol>")
+	locals["images"] = images 
+	t, err := template.ParseFiles("list.html")
+	if err != nil {
+		http.Error(w, err.Error(),
+		http.StatusInternalServerError)
+		return
+	}
+	t.Execute(w, locals)
 }
+
+// func renderHtml(w http.ResponseWriter, tmpl string, locals map[string]interface{}) err error {
+	// t, err = template.ParseFiles(tmpl + ".html")
+	// if err != nil {
+		// return err
+	// }
+	// err = t.Execute(w, locals)
+	// return nil
+// }
 
 func main(){
 	http.HandleFunc("/", listHandler)
 	http.HandleFunc("/view", viewHandler)
 	http.HandleFunc("/upload", uploadHandler)
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8081", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err.Error())
 	}
