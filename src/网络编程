@@ -30,3 +30,89 @@ Dial() 函数
         conn, err := net.Dial("ip4:icmp", "www.baidu.com")
     ICMP链接（使用协议编号）：
         conn, err := net.Dial("ip4:1", "10.0.0.3")
+
+HTTP 编程：
+    HTTP（HyperText Transfer Protocol，超文本传输协议）是互联网上应用最为广泛的一种网络
+    协议，定义了客户端和服务端之间请求与响应的传输标准。
+
+Go内置的 net/http 包提供了最简洁的HTTP客户端实现，我们无需借助第三方网络通信库
+（比如 libcurl ）就可以直接使用HTTP中用得最多的GET和POST方式请求数据。
+1. 基本方法
+    net/http 包的 Client 类型提供了如下几个方法，让我们可以用最简洁的方式实现 HTTP
+    请求：
+        func (c *Client) Get(url string) (r *Response, err error)
+        func (c *Client) Post(url string, bodyType string, body io.Reader) (r *Response, err error)
+        func (c *Client) PostForm(url string, data url.Values) (r *Response, err error)
+
+        func (c *Client) Head(url string) (r *Response, err error)
+            该方法同  http.Get() 方法一 样，只需传入目标 URL 一个参数即可
+
+        func (c *Client) Do(req *Request) (resp *Response, err error)    
+
+    http.Get 和 http.PostForm 可以满足大部分场景的应用， 有时候我们需要改变http header 字段：
+    如， User-Agent， 传递Cookie， 就可以使用 net/http 包 http.Client 对象的 Do() 方法来实现 
+
+Json 为何物？
+        JSON （JavaScript Object Notation）是一种比XML更轻量级的数据交换格式，在易于人们阅
+    读和编写的同时，也易于程序解析和生成。尽管JSON是JavaScript的一个子集，但JSON采用完全
+    独立于编程语言的文本格式，且表现为键/值对集合的文本描述形式（类似一些编程语言中的字
+    典结构），这使它成为较为理想的、跨平台、跨语言的数据交换语言。
+        在 Web 开发领域中，JSON被广泛应用于 Web 服务端程序和客户端之间的数据
+    通信，但也不仅仅局限于此，其应用范围非常广阔，比如作为Web Services API输出的标准格式，
+    又或是用作程序网络通信中的远程过程调用（RPC）等
+
+    Go语言的大多数数据类型都可以转化为有效的JSON文本，但channel、complex和函数这几种
+类型除外。
+
+    如果转化前的数据结构中出现指针，那么将会转化指针所指向的值，如果指针指向的是零值，
+那么 null 将作为转化后的结果输出
+
+在Go中，JSON转化前后的数据类型映射如下。
+    布尔值转化为JSON后还是布尔类型。
+    浮点数和整型会被转化为JSON里边的常规数字。
+    字符串将以UTF-8编码转化输出为Unicode字符集的字符串，特殊字符比如 < 将会被转义为
+        \u003c 。
+    数组和切片会转化为JSON里边的数组，但 []byte 类型的值将会被转化为 Base64 编码后
+        的字符串， slice 类型的零值会被转化为  null 。
+    结构体会转化为JSON对象，并且只有结构体里边以大写字母开头的可被导出的字段才会
+        被转化输出，而这些可导出的字段会作为JSON对象的字符串索引。
+    转化一个 map 类型的数据结构时，该数据的类型必须是  map[string]T （ T 可以是
+        encoding/json 包支持的任意数据类型）。
+
+解码未知结构的JSON数据:
+        Go内建这样灵活的类型系统，向我们传达了一个很有价值的信息：空接口是通用类型。
+        如果要解码一段未知结构的JSON，只需将这段JSON数据解码输出到一个空接口即可。
+        在解码JSON数据的过程中，JSON数据里边的元素类型将做如下转换：
+            JSON中的布尔值将会转换为Go中的 bool 类型；
+            数值会被转换为Go中的 float64 类型；
+            字符串转换后还是 string 类型；
+            JSON数组会转换为 []interface{} 类型；
+            JSON对象会转换为 map[string]interface{} 类型；
+            null 值会转换为 nil 。
+
+
+JOSN 的流式读写
+    Go内建的 encoding/json 包还提供 Decoder 和 Encoder 两个类型，用于支持JSON数据的
+    流式读写，并提供 NewDecoder() 和 NewEncoder() 两个函数来便于具体实现：
+    func NewDecoder(r io.Reader) *Decoder
+    func NewEncoder(w io.Writer) *Encoder
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
