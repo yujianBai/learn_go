@@ -1,0 +1,44 @@
+反射：
+        反射（reflection）是在Java出现后迅速流行起来的一种概念。通过反射，你可以获取丰富的
+    类型信息，并可以利用这些类型信息做非常灵活的工作
+    
+        大多数现代的高级语言都以各种形式支持反射功能，除了一切以性能为上的C++语言。Go
+    语言的反射实现了反射的大部分功能，但没有像Java语言那样内置类型工厂，故而无法做到像Java
+    那样通过类型字符串创建对象实例
+    
+        反射是把双刃剑，功能强大但代码可读性并不理想。若非必要，我们并不推荐使用反射，这
+    也是我们把反射放到进阶话题来介绍的原因
+    
+    基本概念：
+        Go语言中的反射与其他语言有比较大的不同。首先我们要理解两个基本概念—— Type 和
+    Value ，它们也是Go语言包中 reflect 空间里最重要的两个类型
+    
+    type MyReader struct {
+    Name string
+    }
+    
+    func (r MyReader)Read(p []byte) (n int, err error) {
+    // 实现自己的Read方法
+    }
+    
+    因为 MyReader 类型实现了 io.Reader 接口的所有方法（其实就是一个 Read() 函数），所以
+    MyReader 实现了接口 io.Reader 。我们可以按如下方式来进行 MyReader 的实例化和赋值：
+    var reader io.Reader
+    reader = &MyReader{"a.txt"}
+    
+    现在我们可以再来解释一下什么是 Type ，什么是 Value 。
+    
+    对所有接口进行反射，都可以得到一个包含 Type 和 Value 的信息结构。比如我们对上例的
+    reader 进行反射，也将得到一个 Type 和 Value ， 
+    Type 为 io.Reader ， 
+    Value 为 MyReader{"a.txt"} 。
+    顾名思义， 
+        Type 主要表达的是被反射的这个变量本身的类型信息，
+        而 Value 则为该变量实例本身的信息
+
+基本用法见chapterNine中 reflect.go
+
+语言交互性
+    和c 语言交互的库， Ggo
+    见chapterNine中代码
+    
