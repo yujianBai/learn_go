@@ -109,7 +109,11 @@ func main(){
 	http.HandleFunc("/view", viewHandler)
 	http.HandleFunc("/upload", uploadHandler)
 
+<<<<<<< HEAD
 	err := http.ListenAndServe(":18081", nil)
+=======
+	err := http.ListenAndServe(":8081", nil)
+>>>>>>> 52db548ae62f1631dfe253420ff53d2d7920ce7d
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err.Error())
 	}
