@@ -2,40 +2,62 @@ package main
 
 import (
 	"net/http"
-	// "fmt"
+	"fmt"
 	"github.com/gorilla/websocket"
+	impl "0106tuisongSystem/impl"
+	"time"
 )
 
-var(
-	upgrade = websocket.Upgrade{
-		CheckOrgin: func(r *http.Request)bool{
+var (
+	upgrade = websocket.Upgrader{ 
+		//允许跨域
+		CheckOrigin: func(r *http.Request)bool{
 			return true
-		},
+		}, 
 	}
 )
 func wsHandler(w http.ResponseWriter, r *http.Request){
-	// fmt.Println("in wsHandler")
+	fmt.Printf("in wsHandler %v\n", w)
 	// w.Write([]byte("hello"))
 	var (
-		conn *websocket.Conn
+		wsConn *websocket.Conn
 		err error
 		data []byte
+		conn *impl.Connection
 	)
 
-	if conn, err = upgrade.Upgrade(w, r, nil); err != nil{
-		return 	
+	if wsConn, err = upgrade.Upgrade(w, r, nil); err != nil{
+		// goto ERR
+		return 
 	}
 
+	if conn, err = impl.InitConnection(wsConn); err != nil{
+		goto ERR
+	}
+
+	go func(){
+		var(
+			err error
+		)
+		for {
+			if err = conn.WriteMessage([]byte("heartbeat")); err != nil{
+				return 
+			}
+			time.Sleep(1 * time.Second)
+		}
+
+	}()
+
 	for{
-		if _, data, err = conn.ReadMessage(); err != nil{
+		if data, err = conn.ReadMessage(); err != nil{
 			goto ERR
 		}
-		if err = conn.WriteMessage(websocket.TextMessage, data); err != nil{
+		if err = conn.WriteMessage(data); err != nil{
 			goto ERR
 		}
 	}
-	ERR:
-		conn.Close()
+ERR:
+	conn.Close()
 }
 
 

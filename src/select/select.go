@@ -41,8 +41,8 @@ func main() {
 	var worker = createWorker(0)
 	var values []int
 
-	tm := time.After(10 * time.Second)
-	tick := time.Tick(time.Second)
+	tm := time.After(10 * time.Second) 
+	tick := time.Tick(time.Second) // 定时
 	for{
 		var activeWorker chan <- int
 		var activeValue int
@@ -51,7 +51,9 @@ func main() {
 			activeValue = values[0]
 		}
 
-		select{ // 非阻塞 获取chan 中的数据
+		select{ 
+			// 非阻塞 获取chan 中的数据  
+			//如果需要同时处理多个 channel，可使⽤用 select 语句。它随机选择⼀一个可⽤用 channel 做 收发操作，或执⾏行 default case
 	        case n := <-c1:
 	        	values = append(values, n)
 		    case n := <-c2:

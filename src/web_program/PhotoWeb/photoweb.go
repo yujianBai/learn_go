@@ -8,7 +8,13 @@ import (
 	"os"
 	"html/template"
 	"io/ioutil"
+	_ "net/http/pprof"  
 )
+
+// import _ "net/http/pprof"  可以查看 系统运行状态
+// 方法1， 通过web端访问： http://localhost:18082/debug/pprof/
+// 方法2， 通过命令行，命令执行， go tool pprof分析性能， web端查看
+
 
 const (
 	UPLOAD_DIR = "./uploads"
@@ -108,12 +114,7 @@ func main(){
 	http.HandleFunc("/", listHandler)
 	http.HandleFunc("/view", viewHandler)
 	http.HandleFunc("/upload", uploadHandler)
-
-<<<<<<< HEAD
 	err := http.ListenAndServe(":18081", nil)
-=======
-	err := http.ListenAndServe(":8081", nil)
->>>>>>> 52db548ae62f1631dfe253420ff53d2d7920ce7d
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err.Error())
 	}
