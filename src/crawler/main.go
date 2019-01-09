@@ -3,6 +3,7 @@ package main
 import (
 	"crawler/engine"
 	"crawler/zhenai/parser"
+	// "time"
 )
 
 func main() {
@@ -10,6 +11,7 @@ func main() {
 		Url : "http://www.zhenai.com/zhenghun",
 		ParserFunc : parser.ParserCityList,
 	})
+	// time.Sleep(10 * time.Second)
 }
 
 

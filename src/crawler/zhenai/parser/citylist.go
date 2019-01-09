@@ -12,16 +12,17 @@ func ParserCityList(contents []byte) engine.ParserResult{
 	matches := re.FindAllStringSubmatch(string(contents), -1)
 
 	result := engine.ParserResult{}
-
+	limit := 2
 	for _, m :=range(matches){
 		 result.Items = append(result.Items, m[2])
-		 result.Requests = append(
-		 	result.Requests,
-			engine.Request{
+		 result.Requests = append( result.Requests, engine.Request{
 					Url:m[1],
-					ParserFunc: engine.NilParser,
-		 		})
-
+					ParserFunc: ParserCity,
+				 })
+		limit --
+		if limit == 0{
+			break
+		}
 	}
 	return result
 }

@@ -1,0 +1,15 @@
+iregexp 库
+
+匹配:
+const text = "string ...." // 需要匹配的原始字符串
+zhengze : = ".+@" // 正则表达式
+
+re := regesp.MustCompile(zhengze)
+match := re.FindString(text) // 找到第一个匹配
+
+re.FindAllString(test, -1) // 找出所有的匹配
+
+
+提取：
+    给正则表达式各个部分加括号 // example `([a-zA-Z0-9]@[a-zA-Z0-9]()+)\.`
+
