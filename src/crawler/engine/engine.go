@@ -16,10 +16,13 @@ func Run(seeds ... Request){
 		requests = requests[1:]
 		log.Printf("Feting %s", r.Url)
 		body, err := fercher.Fetch(r.Url)
+
 		if err != nil{
-			log.Panicf("Fecther:error fetching url:%s:%v", r.Url, err)
-			continue
+			// log.Panicf("Fecther:error fetching url:%s, error:%v", r.Url, err)
+			log.Printf("Fecther:error fetching url:%s, error:%v", r.Url, err)
+			// continue
 		}
+
 		paserResult := r.ParserFunc(body)
 		requests = append(requests, paserResult.Requests...)
 		// 等价于，    append(requests, paserResult.Requests[0], paserResult.Requests[1])

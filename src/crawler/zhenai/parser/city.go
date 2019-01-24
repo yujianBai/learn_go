@@ -16,11 +16,12 @@ func ParserCity(contents []byte)engine.ParserResult{
 	result := engine.ParserResult{}
 	for _, m := range mathches{
 		// log.Println("in city Parsercity matches", m)
-		result.Items = append(result.Items, "user "+string(m[2]))
+		name := string(m[2])
+		result.Items = append(result.Items, "user "+name)
 		result.Requests = append(result.Requests, engine.Request{
 							Url : string(m[1]),
 							ParserFunc : func(c []byte) engine.ParserResult{
-								return ParserProfile(c, string(m[2]))
+								return ParserProfile(c, name)
 							},
 						})
 	}
